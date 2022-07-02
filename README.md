@@ -57,4 +57,57 @@ inventory = staging/hosts
 remote_user = vagrant
 host_key_checking = False
 retry_files_enabled = False
-``
+```
+* Из предыдущего файла удаляю информацию о пользователе*
+```
+igels@LaptopAll:~/hw11/Ansible$ vi staging/hosts
+[web]
+nginx ansible_host=127.0.0.1 ansible_port=2222
+ansible_private_key_file=.vagrant/machines/nginx/virtualbox/private_key
+```
+* Проверяю доступ к машине учитывая изменения*
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible nginx -m ping
+nginx | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+* Проверяю какое ядро установлено на хосте *
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible nginx -m command -a "uname -r"
+nginx | CHANGED | rc=0 >>
+3.10.0-1127.el7.x86_64
+```
+* Проверяю статус сервиса firewalld *
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible nginx -m systemd -a name=firewalld
+nginx | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "name": "firewalld",
+    "status": {
+        "ActiveEnterTimestampMonotonic": "0",
+        "ActiveExitTimestampMonotonic": "0",
+        "ActiveState": "inactive",
+```
+* Устанавливаю пакет epel-release на хост*
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible nginx -m yum -a "name=epel-release state=present" -b
+nginx | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "changes": {
+        "installed": [
+            "epel-release"
+        ]
+    },
+```
+
