@@ -110,4 +110,47 @@ nginx | CHANGED => {
         ]
     },
 ```
+* Создаю файл epel.yml, который будет простым плейбуком описывающим установку "epel-release" *
+* (Для работы с этим файлом использую Visio Studio Code, до неё очень долго мучался с отработкой строк и отспуплений в файле плейбука)*
+```---
+- name: Install EPEL Repo
+  hosts: nginx
+  become: true
+  tasks:
+    - name: Install EPEL Repo package from standard repo
+      yum:
+       name: epel-release
+       state: present
+```
+* Запускаю выполнение плейбука *
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible-playbook epel.yml
 
+PLAY [Install EPEL Repo] *******************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [nginx]
+
+TASK [Install EPEL Repo package from standard repo] ****************************
+ok: [nginx]
+
+PLAY RECAP *********************************************************************
+nginx                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+* Запускаю команду  ansible nginx -m yum -a "name=epel-release state=absent" -b, с последующей установкой плейбука, чтобы увидеть разницу *
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible-playbook epel.yml
+
+PLAY [Install EPEL Repo] *******************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [nginx]
+
+TASK [Install EPEL Repo package from standard repo] ****************************
+changed: [nginx]
+
+PLAY RECAP *********************************************************************
+nginx                      : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+* Создаю файл nginx.yml, который будет устанавливать nginx *
+```
