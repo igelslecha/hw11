@@ -153,4 +153,60 @@ PLAY RECAP *********************************************************************
 nginx                      : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 * Создаю файл nginx.yml, который будет устанавливать nginx *
+* В плейбук введены tag, проверяю их *
 ```
+igels@LaptopAll:~/hw11/Ansible$ ansible-playbook nginx.yml --list-tags
+
+playbook: nginx.yml
+
+  play #1 (nginx): NGINX | Install and configure NGINX	TAGS: []
+      TASK TAGS: [epel-package, nginx-configuration, nginx-package, packages]
+* Установка только nginx *
+```
+igels@LaptopAll:~/hw11/Ansible$ ansible-playbook nginx.yml -t nginx-package
+
+PLAY [NGINX | Install and configure NGINX] *************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [nginx]
+
+TASK [NGINX | Install nginx package from EPEL Repo] ****************************
+changed: [nginx]
+
+RUNNING HANDLER [restart nginx] ************************************************
+changed: [nginx]
+
+PLAY RECAP *********************************************************************
+nginx                      : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+* Добавляю шаблон для конфига nginx и модуль, который будет копировать этот шаблон на хост *
+```
+- name: NGINX | Create NGINX config file from template
+ template:
+ src: templates/nginx.conf.j2
+ dest: /tmp/nginx.conf
+ tags:
+ - nginx-configuration
+ ```
+ * Добавляю переменные, чтобы nginx слушал на 8080 порту, добавляю секцию vars*
+ ```
+ vars:
+ nginx_listen_port: 8080
+ ```
+ * Теперь создаю handler и добавляю notify к копированию шаблона. Теперь каждýй раз когда *
+ * конфиг будет изменяться - сервис перезагрузиться. Секция с handlers будет выглядеть следующим образом: *
+ ```
+ handlers:
+ - name: restart nginx     # рестарт и включение сервиса при загрузке сервиса
+ systemd:
+ name: nginx
+ state: restarted
+ enabled: yes
+
+ - name: reload nginx      # перечитать конфиг
+ systemd:
+ name: nginx
+ state: reloaded
+ ```
+ 
+ 
