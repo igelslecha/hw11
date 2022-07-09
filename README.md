@@ -12,9 +12,9 @@ ansible
 - после установки nginx должен быть в режиме enabled в systemd
 - должен быть исполþзован notify для старта nginx после установки
 - сайт должен слушать на нестандартном порту - 8080, для этого использовать
-переменнýе в Ansible
-- Сделать все это с исполþзованием Ansible роли
-Домашнее задание считаетсā принятым, если:
+переменную в Ansible
+- Сделать все это с использованием Ansible роли
+Домашнее задание считается принятым, если:
 - предоставлен Vagrantfile и готовый playbook/роль ( инструкция по запуску
 стенда, если посчитаете необходимым )
 - после запуска стенда nginx доступен на порту 8080
@@ -208,5 +208,22 @@ nginx                      : ok=3    changed=2    unreachable=0    failed=0    s
  name: nginx
  state: reloaded
  ```
- 
+ * Проверяю доступ к nginx через порт 8080 *
+ ```
+ igels@LaptopAll:~/hw11/Ansible$ curl http://192.168.56.150:8080
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Welcome to CentOS</title>
+  <style rel="stylesheet" type="text/css"> 
+
+	html {
+	background-image:url(img/html-background.png);
+	background-color: white;
+	font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+	font-size: 0.85em;
+	line-height: 1.25em;
+	margin: 0 4% 0 4%;
+	}
+```
  
