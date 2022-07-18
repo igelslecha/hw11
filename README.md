@@ -252,6 +252,7 @@ nginx                      : ok=3    changed=2    unreachable=0    failed=0    s
 	margin: 0 4% 0 4%;
 	}
 ```
+
  **Как проверять **
  
  *Для запуска стенда должны быть предварительно установлены vagrant and ansible 
