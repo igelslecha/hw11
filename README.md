@@ -255,10 +255,9 @@ nginx                      : ok=3    changed=2    unreachable=0    failed=0    s
 
  **Как проверять **
  
- *Для запуска стенда должны быть предварительно установлены vagrant and ansible 
+ *Для запуска стенда должны быть предварительно установлены vagrant and ansible, при запуске ВМ плейбук проигрывается и можно сразу проверить
  
  ``` cd ../hw11/Ansible/
  vagrant up
- ansible-playbook nginx.yml
  curl http://192.168.56.150:8080
 ```
